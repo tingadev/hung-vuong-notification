@@ -1,46 +1,18 @@
-FROM node:22-alpine3.19 as BUILDER
-
-WORKDIR /app
-
-COPY package.json ./
-COPY yarn.lock ./
-
-RUN yarn install --frozen-lockfile
-
-COPY . .
-
-ENV NODE_ENV production
-
-RUN yarn build
-
-
-
-# ==============================
-
-FROM node:22-alpine3.19 as PRODUCTION
-
-WORKDIR /app
-
-COPY --from=BUILDER /app/package.json ./
-COPY --from=BUILDER /app/yarn.lock ./
-COPY --from=BUILDER /app/node_modules ./node_modules
-COPY --from=BUILDER /app/dist ./dist
-
-RUN yarn install --production --frozen-lockfile
-
-# ==============================
-
 FROM node:22-alpine3.19
 
+WORKDIR /usr/src/app
 
-WORKDIR /app
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
+# Install app dependencies
+RUN npm install
 
-COPY --from=PRODUCTION /app/node_modules ./node_modules
-COPY --from=PRODUCTION /app/dist ./dist
-COPY --from=PRODUCTION /app/package.json ./
+# Bundle app source
+COPY . .
 
-ENV NODE_ENV production
+# Creates a "dist" folder with the production build
+RUN npm run build
 
-EXPOSE 8080
-CMD ["yarn", "start:prod"]
+# Start the server using the production build
+CMD [ "node", "dist/src/main.js" ]
