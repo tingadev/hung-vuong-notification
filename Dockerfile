@@ -1,4 +1,4 @@
-FROM node:16-alpine as BUILDER
+FROM node:22-alpine3.19 as BUILDER
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN yarn build
 
 # ==============================
 
-FROM node:16-alpine as PRODUCTION
+FROM node:22-alpine3.19 as PRODUCTION
 
 WORKDIR /app
 
@@ -30,7 +30,7 @@ RUN yarn install --production --frozen-lockfile
 
 # ==============================
 
-FROM node:16-alpine
+FROM node:22-alpine3.19
 
 
 WORKDIR /app
