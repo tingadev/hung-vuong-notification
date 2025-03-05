@@ -32,7 +32,9 @@ export class NotificationController
   }
 
   @Get('/total-unseen')
-  async totalUnSeen() {
-    return this.service.countUnSeenNotification();
+  async totalUnSeen(@Req() request: Request) {
+    const user_id = request.headers['user-id'] as string;
+    console.log({ user_id });
+    return this.service.countUnSeenNotification(user_id);
   }
 }

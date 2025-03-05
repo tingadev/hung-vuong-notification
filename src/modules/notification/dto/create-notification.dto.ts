@@ -7,6 +7,10 @@ export class CreateNotificationDto {
   content: string;
 
   @IsNotEmpty()
+  @IsString()
+  user_id: string;
+
+  @IsNotEmpty()
   @IsEnum(NotificationType)
   type: NotificationType;
 

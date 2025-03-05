@@ -14,6 +14,9 @@ export class NotificationEntity extends BaseEntity {
   @Column()
   type: NotificationType;
 
+  @Column({ nullable: true })
+  user_id: string;
+
   @Column('jsonb', { nullable: true })
   metadata: any;
 

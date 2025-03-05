@@ -22,15 +22,17 @@ export class NotificationService extends TypeOrmCrudService<NotificationEntity> 
     entity.content = data.content;
     entity.type = data.type;
     entity.metadata = data.metadata;
+    entity.user_id = data.user_id;
     const result = await this.repo.save(entity);
     this.ablyService.publishMessage(entity);
     return result;
   }
 
-  async countUnSeenNotification() {
+  async countUnSeenNotification(user_id: string) {
     const unseen = await this.repo.count({
       where: {
         seen_at: IsNull(),
+        user_id: user_id,
       },
     });
     return unseen;
