@@ -21,7 +21,7 @@ export class NotificationService extends TypeOrmCrudService<NotificationEntity> 
     const entity = new NotificationEntity();
     entity.content = data.content;
     entity.type = data.type;
-    entity.metadata = data.metadata;
+    entity.metadata = data.payload;
     entity.user_id = data.user_id;
     const result = await this.repo.save(entity);
     this.ablyService.publishMessage(entity);
